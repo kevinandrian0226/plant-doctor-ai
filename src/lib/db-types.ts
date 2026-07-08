@@ -19,6 +19,8 @@ export interface PlantRecord {
   fertilizer_schedule: string | null;
   light_condition: string | null;
   qr_code_url: string | null;
+  is_public: boolean;
+  shared_at: string | null;
   created_at: string;
   updated_at: string;
 }
