@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Leaf, MapPin, MessageCircle, ArrowRight, Tag } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { ListingOwnerActions } from "@/components/ListingOwnerActions";
 import type { ListingRecord } from "@/lib/db-types";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +32,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 export default async function ListingPage({ params }: { params: { id: string } }) {
   const l = await load(params.id);
   if (!l) notFound();
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isOwner = !!user && user.id === l.user_id;
   const wa = (l.whatsapp || "").replace(/[^0-9]/g, "");
   const waLink = wa
     ? `https://wa.me/${wa.startsWith("0") ? "62" + wa.slice(1) : wa}?text=${encodeURIComponent(`Halo, saya tertarik dengan "${l.title}" (${rupiah(l.price)}) di Plant Doctor AI Marketplace.`)}`
@@ -73,6 +77,8 @@ export default async function ListingPage({ params }: { params: { id: string } }
                 <p className="text-center text-sm text-charcoal-muted">Kontak penjual belum tersedia.</p>
               )}
             </div>
+
+            {isOwner && <ListingOwnerActions id={l.id} status={l.status} />}
           </div>
         </div>
 
