@@ -6,7 +6,8 @@ export const dynamic = "force-dynamic";
 
 export default async function NewListingPage() {
   const supabase = createClient();
-  const { data: pData } = await supabase.from("plants").select("id, nickname, common_name, category").order("updated_at", { ascending: false });
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: pData } = await supabase.from("plants").select("id, nickname, common_name, category").eq("user_id", user?.id ?? "").order("updated_at", { ascending: false });
   const plants = (pData || []) as Partial<PlantRecord>[];
   const ids = plants.map((p) => p.id as string);
   let photos: Partial<PlantPhotoRecord>[] = [];
