@@ -41,6 +41,7 @@ export async function register(
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
+  const redirectTo = String(formData.get("redirect") || "/dashboard");
 
   if (!email || !password) {
     return { error: "Email dan password wajib diisi." };
@@ -69,7 +70,7 @@ export async function register(
   }
 
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect(redirectTo);
 }
 
 // Update nama tampilan user
