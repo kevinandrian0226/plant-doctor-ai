@@ -35,10 +35,10 @@ export function Navbar({ email }: { email?: string }) {
       <header className="sticky top-0 z-40 border-b border-black/5 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-gray-950/80">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-leaf-600 text-white shadow-soft">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-leaf-700 text-white shadow-soft ring-1 ring-gold-300/30">
               <Leaf className="h-5 w-5" />
             </span>
-            <span className="text-lg font-bold">Plant Doctor AI</span>
+            <span className="text-lg font-bold tracking-tight">Plant Doctor <span className="text-gold-600 dark:text-gold-300">AI</span></span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

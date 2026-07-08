@@ -36,10 +36,10 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   return (
     <div className="w-full max-w-md">
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-leaf-600 text-white shadow-soft">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-leaf-700 text-white shadow-soft ring-1 ring-gold-300/30">
           <Leaf className="h-7 w-7" />
         </div>
-        <h1 className="text-2xl font-bold">
+        <h1 className="display-title text-3xl">
           {mode === "login" ? "Selamat datang kembali" : "Buat akun baru"}
         </h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
