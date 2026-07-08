@@ -9,6 +9,7 @@ import { RecoveryTracker } from "./RecoveryTracker";
 import { QRCodeCard } from "./QRCodeCard";
 import { TreatmentTab } from "./TreatmentTab";
 import { PlantChat } from "./PlantChat";
+import { ShareToggle } from "./ShareToggle";
 import { HealthBadge } from "./HealthBadge";
 import { HealthScore } from "./HealthScore";
 import { ProgressChart } from "./ProgressChart";
@@ -69,6 +70,7 @@ export function PlantTabs({
           {progress.length > 1 && (
             <div className="card"><h3 className="mb-3 eyebrow">Progress Kesehatan</h3><ProgressChart data={progress} /></div>
           )}
+          <div><h3 className="mb-2 eyebrow">Bagikan ke Publik</h3><ShareToggle plantId={plant.id} initialPublic={plant.is_public} /></div>
           <div><h3 className="mb-2 eyebrow">Edit Profil</h3><PlantProfileForm plant={plant} /></div>
         </div>
       )}
