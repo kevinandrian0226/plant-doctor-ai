@@ -489,3 +489,72 @@ Balas HANYA JSON valid:
     next_actions: Array.isArray(parsed.next_actions) ? parsed.next_actions : [],
   };
 }
+
+/**
+ * "Tanya Dokter" — chat lanjutan grounded pada diagnosa tanaman.
+ * Menjawab pertanyaan perawatan user dengan konteks diagnosa terakhir.
+ */
+export interface ChatContext {
+  plantName: string;
+  scientificName?: string;
+  category?: string;
+  summary?: string;
+  healthScore?: number;
+  issues?: string[];
+  treatmentSteps?: string[];
+}
+export interface ChatTurn {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export async function chatWithDoctor(
+  ctx: ChatContext,
+  history: ChatTurn[]
+): Promise<string> {
+  const anthropic = getClient();
+
+  const ctxLines = [
+    `- Tanaman: ${ctx.plantName}${ctx.scientificName ? ` (${ctx.scientificName})` : ""}`,
+    ctx.category ? `- Kategori: ${ctx.category}` : "",
+    ctx.healthScore != null ? `- Skor kesehatan terakhir: ${ctx.healthScore}/100` : "",
+    ctx.summary ? `- Ringkasan diagnosa: ${ctx.summary}` : "",
+    ctx.issues && ctx.issues.length ? `- Masalah terdeteksi: ${ctx.issues.join(", ")}` : "",
+    ctx.treatmentSteps && ctx.treatmentSteps.length
+      ? `- Rencana perawatan: ${ctx.treatmentSteps.slice(0, 6).join("; ")}`
+      : "",
+  ].filter(Boolean).join("\n");
+
+  const system = `Kamu adalah "Plant Doctor AI", asisten dokter tanaman yang ramah untuk penghobi tanaman hias premium (aroid, monstera, anthurium, aglaonema, bonsai, sukulen).
+Jawab pertanyaan lanjutan user dalam Bahasa Indonesia yang hangat, ringkas, dan praktis (maksimal ~4 kalimat atau poin singkat bila perlu).
+Selalu berlandaskan KONTEKS DIAGNOSA di bawah. Jika pertanyaan di luar konteks tanaman/perawatan, arahkan kembali dengan sopan.
+
+Aturan keamanan (WAJIB):
+- JANGAN sebut dosis kimia spesifik (mili, gram, rasio); arahkan "ikuti petunjuk label produk".
+- Untuk kondisi serius (busuk akar/batang parah, penyebaran cepat, hama berat), sarankan konsultasi ke nursery/ahli tanaman.
+- Ingatkan bahwa jawaban adalah estimasi berbasis foto, bukan pengganti pemeriksaan langsung, HANYA bila relevan (jangan tiap pesan).
+- Jangan mengarang fakta; jika tidak yakin, katakan perlu foto/informasi tambahan.
+
+KONTEKS DIAGNOSA:
+${ctxLines || "- (belum ada diagnosa; minta user melakukan scan terlebih dahulu bila perlu)"}`;
+
+  const messages: Anthropic.MessageParam[] = history
+    .filter((m) => m.content && m.content.trim())
+    .slice(-12)
+    .map((m) => ({ role: m.role, content: m.content }));
+
+  if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
+    throw new Error("Pesan terakhir harus dari user.");
+  }
+
+  const message = await anthropic.messages.create({
+    model: MODEL,
+    max_tokens: 700,
+    system,
+    messages,
+  });
+
+  const textBlock = message.content.find((b) => b.type === "text");
+  const raw = textBlock && textBlock.type === "text" ? textBlock.text : "";
+  return sanitizeProductText(raw.trim()) || "Maaf, aku belum bisa menjawab itu. Coba tanyakan hal lain seputar perawatan tanamanmu.";
+}
