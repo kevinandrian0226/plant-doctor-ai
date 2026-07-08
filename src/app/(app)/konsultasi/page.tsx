@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 
 export default async function KonsultasiPage() {
   const supabase = createClient();
-  const { data } = await supabase.from("plants").select("id, nickname, common_name").order("updated_at", { ascending: false });
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data } = await supabase.from("plants").select("id, nickname, common_name").eq("user_id", user?.id ?? "").order("updated_at", { ascending: false });
   const plants = ((data || []) as Partial<PlantRecord>[]).map((p) => ({
     id: p.id as string,
     name: (p.nickname || p.common_name || "Tanaman") as string,
