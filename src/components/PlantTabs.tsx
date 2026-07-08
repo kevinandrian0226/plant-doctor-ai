@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { LayoutGrid, Stethoscope, ListChecks, Camera, RefreshCw, QrCode, MessageCircle } from "lucide-react";
+import { LayoutGrid, Stethoscope, ListChecks, Camera, RefreshCw, QrCode, MessageCircle, BookOpen } from "lucide-react";
 import { DiagnosisResultView } from "./DiagnosisResultView";
 import { PlantProfileForm } from "./PlantProfileForm";
 import { RecoveryTracker } from "./RecoveryTracker";
@@ -10,6 +10,7 @@ import { QRCodeCard } from "./QRCodeCard";
 import { TreatmentTab } from "./TreatmentTab";
 import { PlantChat } from "./PlantChat";
 import { ShareToggle } from "./ShareToggle";
+import { CareGuideTab } from "./CareGuideTab";
 import { HealthBadge } from "./HealthBadge";
 import { HealthScore } from "./HealthScore";
 import { ProgressChart } from "./ProgressChart";
@@ -18,17 +19,18 @@ import { statusFromScore } from "@/lib/health";
 import { formatDate, cn } from "@/lib/utils";
 import type { PlantRecord, ScanRecord, PlantPhotoRecord, TreatmentRecord } from "@/lib/db-types";
 
-type Tab = "overview" | "diagnoses" | "treatments" | "chat" | "photos" | "recovery" | "qr";
+type Tab = "overview" | "diagnoses" | "treatments" | "care" | "chat" | "photos" | "recovery" | "qr";
 const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "overview", label: "Ikhtisar", icon: LayoutGrid },
   { id: "diagnoses", label: "Diagnosa", icon: Stethoscope },
   { id: "treatments", label: "Treatment", icon: ListChecks },
+  { id: "care", label: "Panduan", icon: BookOpen },
   { id: "chat", label: "Tanya Dokter", icon: MessageCircle },
   { id: "photos", label: "Foto", icon: Camera },
   { id: "recovery", label: "Recovery", icon: RefreshCw },
   { id: "qr", label: "QR", icon: QrCode },
 ];
-const VALID: Tab[] = ["overview", "diagnoses", "treatments", "chat", "photos", "recovery", "qr"];
+const VALID: Tab[] = ["overview", "diagnoses", "treatments", "care", "chat", "photos", "recovery", "qr"];
 
 export function PlantTabs({
   plant, scans, photos, treatments, initialTab = "overview",
@@ -114,6 +116,8 @@ export function PlantTabs({
       )}
 
       {tab === "treatments" && <TreatmentTab treatments={treatments} />}
+
+      {tab === "care" && <CareGuideTab plantId={plant.id} plantName={plantName} scientificName={plant.scientific_name} category={plant.category} initialGuide={plant.care_guide} />}
 
       {tab === "chat" && <PlantChat plantId={plant.id} plantName={plantName} />}
 

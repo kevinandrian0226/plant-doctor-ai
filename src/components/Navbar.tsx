@@ -9,6 +9,7 @@ import {
   Sprout,
   BellRing,
   Compass,
+  Store,
   Settings,
   Moon,
   Sun,
@@ -23,6 +24,7 @@ const NAV = [
   { href: "/scan", label: "Scan", icon: ScanLine },
   { href: "/plants", label: "Tanaman", icon: Sprout },
   { href: "/explore", label: "Explore", icon: Compass },
+  { href: "/market", label: "Market", icon: Store },
   { href: "/reminders", label: "Reminder", icon: BellRing },
 ];
 
