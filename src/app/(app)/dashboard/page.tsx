@@ -91,11 +91,11 @@ export default async function DashboardPage() {
                 <p className="truncate font-semibold text-charcoal dark:text-sage-50">{latestPlant.nickname || latestPlant.common_name}</p>
                 <div className="mt-1.5 flex flex-wrap gap-1.5">
                   <HealthBadge status={statusFromScore(latest.health_score)} />
-                  <RiskBadge level={latest.risk_level} />
+                  {latest.risk_level && <RiskBadge level={latest.risk_level} />}
                 </div>
                 <p className="mt-1.5 text-[11px] text-charcoal-muted">{formatDate(latest.created_at)}</p>
               </div>
-              <ArrowRight className="h-4 w-4 self-center text-gray-300 transition group-hover:translate-x-1 group-hover:text-leaf-500" />
+              <ArrowRight className="h-4 w-4 self-center text-charcoal-muted/50 transition group-hover:translate-x-1 group-hover:text-leaf-500" />
             </Link>
           ) : (
             <EmptyState icon={Leaf} title="Belum ada diagnosis" description="Mulai scan tanaman pertamamu." action={{ label: "Scan Sekarang", href: "/scan", icon: ScanLine }} />
