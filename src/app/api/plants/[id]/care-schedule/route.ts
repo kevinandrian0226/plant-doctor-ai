@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
+const CARE_RULES = ["every 3 days", "every 14 days", "every 7 days"];
+
 function d(days: number) {
   const dt = new Date();
   dt.setDate(dt.getDate() + days);
@@ -18,6 +20,12 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .from("plants").select("id, nickname, common_name").eq("id", params.id).eq("user_id", user.id).maybeSingle();
   if (!plant) return NextResponse.json({ error: "Tanaman tidak ditemukan." }, { status: 404 });
   const name = plant.nickname || plant.common_name || "tanaman";
+
+  // Idempotent: hapus jadwal perawatan lama yang di-generate untuk tanaman ini
+  // sebelum menyisipkan yang baru, agar tidak menumpuk reminder ganda.
+  await supabase
+    .from("reminders").delete()
+    .eq("plant_id", params.id).eq("user_id", user.id).in("repeat_rule", CARE_RULES);
 
   const rows = [
     { user_id: user.id, plant_id: params.id, title: `Siram ${name}`, reminder_type: "watering", due_date: d(3), repeat_rule: "every 3 days" },
