@@ -59,8 +59,8 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Halo, {name} 🌿</h1>
-          <p className="text-sm text-charcoal-muted">Pantau kesehatan koleksi tanamanmu.</p>
+          <h1 className="display-title text-3xl">Halo, {name} 🌿</h1>
+          <p className="mt-0.5 text-sm text-charcoal-muted">Pantau kesehatan koleksi tanamanmu.</p>
         </div>
         <Link href="/scan" className="btn-primary"><ScanLine className="h-4 w-4" /> Scan New Plant</Link>
       </div>
@@ -127,9 +127,9 @@ function Stat({ icon: Icon, label, value, tone }: { icon: React.ElementType; lab
     amber: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
   };
   return (
-    <div className="card flex flex-col items-center gap-1.5 py-4 text-center sm:flex-row sm:gap-3 sm:text-left">
+    <div className="card-lux flex flex-col items-center gap-1.5 py-4 text-center sm:flex-row sm:gap-3 sm:text-left">
       <span className={`flex h-10 w-10 items-center justify-center rounded-2xl ${tones[tone]}`}><Icon className="h-5 w-5" /></span>
-      <div><p className="text-2xl font-bold leading-none">{value}</p><p className="text-[11px] text-charcoal-muted">{label}</p></div>
+      <div><p className="display-title text-2xl leading-none">{value}</p><p className="text-[11px] text-charcoal-muted">{label}</p></div>
     </div>
   );
 }
