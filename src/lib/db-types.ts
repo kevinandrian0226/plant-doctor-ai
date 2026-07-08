@@ -21,6 +21,7 @@ export interface PlantRecord {
   qr_code_url: string | null;
   is_public: boolean;
   shared_at: string | null;
+  care_guide: unknown | null;
   created_at: string;
   updated_at: string;
 }
@@ -96,3 +97,18 @@ export const PLANT_FIELDS = [
   "light_condition",
   "qr_code_url",
 ] as const;
+
+export interface ListingRecord {
+  id: string;
+  user_id: string;
+  plant_id: string | null;
+  title: string;
+  price: number;
+  currency: string;
+  description: string | null;
+  photo_url: string | null;
+  whatsapp: string | null;
+  city: string | null;
+  status: "available" | "sold";
+  created_at: string;
+}

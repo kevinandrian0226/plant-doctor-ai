@@ -558,3 +558,54 @@ ${ctxLines || "- (belum ada diagnosa; minta user melakukan scan terlebih dahulu 
   const raw = textBlock && textBlock.type === "text" ? textBlock.text : "";
   return sanitizeProductText(raw.trim()) || "Maaf, aku belum bisa menjawab itu. Coba tanyakan hal lain seputar perawatan tanamanmu.";
 }
+
+/** Care guide otomatis per spesies (ala PictureThis). */
+export interface CareGuide {
+  light: string;
+  water: string;
+  humidity: string;
+  temperature: string;
+  soil: string;
+  fertilizer: string;
+  repotting: string;
+  tips: string[];
+  toxicity: string;
+}
+
+export async function generateCareGuide(plant: {
+  name: string;
+  scientificName?: string;
+  category?: string;
+}): Promise<CareGuide> {
+  const anthropic = getClient();
+  const system = `Kamu "Plant Doctor AI". Buat panduan perawatan ringkas & praktis (Bahasa Indonesia) untuk tanaman berikut. Balas HANYA JSON valid:
+{"light":string,"water":string,"humidity":string,"temperature":string,"soil":string,"fertilizer":string,"repotting":string,"tips":[string],"toxicity":string}
+Aturan: jangan sebut dosis kimia spesifik (arahkan ikuti petunjuk label). Setiap field 1-2 kalimat singkat. tips maksimal 4.`;
+  const msg = `Tanaman: ${plant.name}${plant.scientificName ? ` (${plant.scientificName})` : ""}${plant.category ? `, kategori ${plant.category}` : ""}. Balas HANYA JSON.`;
+  const message = await anthropic.messages.create({
+    model: MODEL,
+    max_tokens: 900,
+    system,
+    messages: [{ role: "user", content: msg }],
+  });
+  const textBlock = message.content.find((b) => b.type === "text");
+  const raw = textBlock && textBlock.type === "text" ? textBlock.text : "";
+  let p: any;
+  try {
+    p = extractJson(raw);
+  } catch {
+    throw new Error("Gagal membuat panduan perawatan.");
+  }
+  const str = (v: any) => (typeof v === "string" ? v.trim() : "");
+  return {
+    light: str(p.light),
+    water: str(p.water),
+    humidity: str(p.humidity),
+    temperature: str(p.temperature),
+    soil: str(p.soil),
+    fertilizer: sanitizeProductText(str(p.fertilizer)),
+    repotting: str(p.repotting),
+    tips: Array.isArray(p.tips) ? p.tips.slice(0, 4).map((t: any) => str(t)).filter(Boolean) : [],
+    toxicity: str(p.toxicity),
+  };
+}
