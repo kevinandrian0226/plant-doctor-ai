@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   Leaf, Camera, ScanSearch, Stethoscope, ListChecks, Sparkles, ArrowRight,
-  HeartPulse, RefreshCw, QrCode, BellRing, Info, FileText,
+  HeartPulse, RefreshCw, QrCode, BellRing, Info, FileText, Star, ShieldCheck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -22,6 +22,20 @@ const FEATURES = [
   { icon: FileText, title: "Journal & PDF", desc: "Riwayat scan, foto & treatment. Unduh laporan PDF." },
 ];
 const AUDIENCE = ["Aroid & Rare Monstera", "Philodendron", "Anthurium", "Aglaonema", "Bonsai", "Sukulen & Kaktus", "Indoor / Outdoor"];
+const STATS = [
+  { value: "1.200+", label: "Spesies dikenali" },
+  { value: "30+", label: "Penyakit & hama" },
+  { value: "< 15 dtk", label: "Per diagnosa" },
+];
+
+function LeafPattern() {
+  return (
+    <div className="pointer-events-none absolute inset-0 opacity-[0.13]" aria-hidden="true">
+      <svg className="absolute -left-10 -top-8 h-64 w-64 -rotate-12" viewBox="0 0 100 100" fill="#fff"><path d="M50 5C25 25 15 55 30 90c5-30 20-55 45-70C62 28 52 45 48 70 60 50 70 30 50 5z" /></svg>
+      <svg className="absolute -bottom-12 right-0 h-80 w-80 rotate-[24deg]" viewBox="0 0 100 100" fill="#fff"><path d="M50 5C25 25 15 55 30 90c5-30 20-55 45-70C62 28 52 45 48 70 60 50 70 30 50 5z" /></svg>
+    </div>
+  );
+}
 
 export default async function LandingPage() {
   const supabase = createClient();
@@ -32,9 +46,9 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-cream-100 dark:bg-charcoal">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-leaf-700 text-white shadow-soft"><Leaf className="h-5 w-5" /></span>
-          <span className="text-lg font-bold">Plant Doctor AI</span>
+          <span className="text-lg font-bold tracking-tight">Plant Doctor <span className="text-gold-600 dark:text-gold-300">AI</span></span>
         </div>
         <div className="flex items-center gap-2">
           {user ? (
@@ -48,67 +62,108 @@ export default async function LandingPage() {
         </div>
       </header>
 
+      {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="mx-4 rounded-[2rem] bg-gradient-to-br from-leaf-800 via-leaf-700 to-leaf-600 px-6 py-16 text-center text-white sm:py-20">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.13]" aria-hidden="true">
-            <svg className="absolute -left-10 -top-8 h-64 w-64 -rotate-12" viewBox="0 0 100 100" fill="#fff"><path d="M50 5C25 25 15 55 30 90c5-30 20-55 45-70C62 28 52 45 48 70 60 50 70 30 50 5z" /></svg>
-            <svg className="absolute -bottom-12 right-0 h-80 w-80 rotate-[24deg]" viewBox="0 0 100 100" fill="#fff"><path d="M50 5C25 25 15 55 30 90c5-30 20-55 45-70C62 28 52 45 48 70 60 50 70 30 50 5z" /></svg>
-          </div>
+        <div className="relative mx-4 overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-leaf-900 via-leaf-800 to-leaf-700 px-6 py-20 text-center text-white shadow-lift sm:py-28">
+          <LeafPattern />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-300/50 to-transparent" aria-hidden="true" />
           <div className="relative mx-auto max-w-3xl">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold text-leaf-50 ring-1 ring-white/20"><Sparkles className="h-3.5 w-3.5" /> Didukung AI Vision</span>
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">Diagnosa kesehatan tanaman <span className="text-leaf-200">dari foto</span></h1>
-            <p className="mx-auto mt-5 max-w-xl text-base text-leaf-50/90">Dokter tanaman pribadi untuk kolektor premium. Deteksi jenis, kenali penyakit & hama, dan dapatkan rencana perawatan dalam hitungan detik.</p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href={ctaHref} className="inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-3.5 text-base font-semibold text-leaf-800 transition hover:bg-leaf-50">{ctaLabel} <ArrowRight className="h-4 w-4" /></Link>
-              {!user && <Link href="/login" className="inline-flex items-center gap-2 rounded-2xl bg-white/15 px-7 py-3.5 text-base font-semibold text-white ring-1 ring-white/25 transition hover:bg-white/25">Sudah punya akun</Link>}
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.14em] text-gold-100 ring-1 ring-gold-300/30 backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-gold-300" /> DIDUKUNG AI VISION
+            </span>
+            <h1 className="display-title text-4xl leading-[1.08] sm:text-6xl">
+              Dokter pribadi untuk<br className="hidden sm:block" /> tanaman <span className="italic text-gold-300">kesayanganmu</span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-leaf-50/85 sm:text-lg">
+              Cukup foto — AI mengenali jenis, mendeteksi penyakit &amp; hama, lalu menyusun rencana perawatan presisi. Dirancang untuk kolektor aroid, monstera langka, anthurium, dan bonsai.
+            </p>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href={ctaHref} className="btn-gold px-8 py-4 text-base">{ctaLabel} <ArrowRight className="h-4 w-4" /></Link>
+              {!user && <Link href="/login" className="inline-flex items-center gap-2 rounded-2xl bg-white/10 px-8 py-4 text-base font-semibold text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/20">Sudah punya akun</Link>}
             </div>
-            <div className="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-2">
-              {AUDIENCE.map((a) => <span key={a} className="rounded-full bg-white/12 px-3 py-1 text-xs font-medium text-leaf-50 ring-1 ring-white/15">{a}</span>)}
+            <div className="mx-auto mt-14 grid max-w-lg grid-cols-3 gap-4 border-t border-white/10 pt-8">
+              {STATS.map((s) => (
+                <div key={s.label}>
+                  <div className="display-title text-2xl text-gold-300 sm:text-3xl">{s.value}</div>
+                  <div className="mt-1 text-[11px] uppercase tracking-wide text-leaf-50/70 sm:text-xs">{s.label}</div>
+                </div>
+              ))}
             </div>
+          </div>
+        </div>
+        <div className="mx-auto -mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-2 px-5">
+          {AUDIENCE.map((a) => (
+            <span key={a} className="rounded-full border border-gold-200/60 bg-white px-3.5 py-1.5 text-xs font-medium text-charcoal-light shadow-sm dark:border-gold-700/30 dark:bg-charcoal/60 dark:text-sage-200">{a}</span>
+          ))}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="mx-auto max-w-6xl px-5 py-24">
+        <div className="text-center">
+          <span className="eyebrow-gold">Cara Kerja</span>
+          <h2 className="display-title mt-3 text-3xl sm:text-4xl">Empat langkah sederhana</h2>
+        </div>
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {STEPS.map((s, i) => (
+            <div key={i} className="card-lux group relative">
+              <span className="absolute right-5 top-4 font-display text-4xl font-semibold text-leaf-50 transition-colors group-hover:text-gold-100 dark:text-white/5">{i + 1}</span>
+              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-leaf-50 text-leaf-700 ring-1 ring-leaf-100 dark:bg-white/5 dark:ring-white/10"><s.icon className="h-6 w-6" /></span>
+              <h3 className="mb-1 font-semibold">{s.title}</h3>
+              <p className="text-sm leading-relaxed text-charcoal-muted">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <section className="mx-auto max-w-6xl px-5 pb-24">
+        <div className="text-center">
+          <span className="eyebrow-gold">Fitur</span>
+          <h2 className="display-title mt-3 text-3xl sm:text-4xl">Semua yang kolektor butuhkan</h2>
+        </div>
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((f, i) => (
+            <div key={i} className="card-lux">
+              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-leaf-50 text-leaf-700 ring-1 ring-leaf-100 dark:bg-white/5 dark:ring-white/10"><f.icon className="h-6 w-6" /></span>
+              <h3 className="mb-1 font-semibold">{f.title}</h3>
+              <p className="text-sm leading-relaxed text-charcoal-muted">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONIAL / TRUST */}
+      <section className="mx-auto max-w-4xl px-5 pb-24">
+        <div className="card-lux relative overflow-hidden text-center">
+          <div className="mb-3 flex items-center justify-center gap-1 text-gold-400">
+            {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+          </div>
+          <p className="display-title mx-auto max-w-2xl text-xl leading-snug sm:text-2xl">
+            &ldquo;Variegata Thai Constellation-ku hampir busuk akar. Plant Doctor mendeteksinya lebih cepat dari mata saya, dan panduan treatment-nya menyelamatkannya.&rdquo;
+          </p>
+          <div className="mt-5 flex items-center justify-center gap-2 text-sm text-charcoal-muted">
+            <ShieldCheck className="h-4 w-4 text-leaf-600" /> Kolektor aroid, Jakarta
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20">
-        <p className="eyebrow text-center">Cara kerja</p>
-        <h2 className="mt-1 text-center text-3xl font-bold tracking-tight">Empat langkah sederhana</h2>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((s, i) => (
-            <div key={i} className="card relative">
-              <span className="absolute right-5 top-4 text-3xl font-extrabold text-leaf-50 dark:text-white/5">{i + 1}</span>
-              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-leaf-50 text-leaf-700 dark:bg-white/5"><s.icon className="h-6 w-6" /></span>
-              <h3 className="mb-1 font-semibold">{s.title}</h3>
-              <p className="text-sm text-charcoal-muted">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 pb-20">
-        <p className="eyebrow text-center">Fitur</p>
-        <h2 className="mt-1 text-center text-3xl font-bold tracking-tight">Semua yang kolektor butuhkan</h2>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((f, i) => (
-            <div key={i} className="card">
-              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-leaf-50 text-leaf-700 dark:bg-white/5"><f.icon className="h-6 w-6" /></span>
-              <h3 className="mb-1 font-semibold">{f.title}</h3>
-              <p className="text-sm text-charcoal-muted">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 pb-20">
-        <div className="flex flex-col items-center gap-6 rounded-[2rem] bg-leaf-700 p-10 text-center text-white sm:p-14">
-          <RefreshCw className="h-10 w-10" />
-          <h2 className="max-w-xl text-2xl font-bold tracking-tight">Lacak progress pemulihan setiap tanaman</h2>
-          <p className="max-w-lg text-leaf-50/90">Simpan riwayat foto, diagnosis, dan grafik kesehatan dari waktu ke waktu — sempurna untuk kolektor, nursery, dan bonsai enthusiast.</p>
-          <Link href={ctaHref} className="rounded-2xl bg-white px-7 py-3 text-sm font-semibold text-leaf-800 transition hover:bg-leaf-50">{ctaLabel}</Link>
+      {/* CTA */}
+      <section className="mx-auto max-w-6xl px-5 pb-24">
+        <div className="relative flex flex-col items-center gap-6 overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-leaf-800 to-leaf-700 p-12 text-center text-white shadow-lift sm:p-16">
+          <LeafPattern />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-300/50 to-transparent" aria-hidden="true" />
+          <div className="relative flex flex-col items-center gap-6">
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-gold-300/30"><RefreshCw className="h-7 w-7 text-gold-300" /></span>
+            <h2 className="display-title max-w-xl text-2xl sm:text-3xl">Lacak progress pemulihan setiap tanaman</h2>
+            <p className="max-w-lg leading-relaxed text-leaf-50/85">Simpan riwayat foto, diagnosis, dan grafik kesehatan dari waktu ke waktu — sempurna untuk kolektor, nursery, dan bonsai enthusiast.</p>
+            <Link href={ctaHref} className="btn-gold px-8 py-3.5">{ctaLabel} <ArrowRight className="h-4 w-4" /></Link>
+          </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-3xl px-5 pb-16">
-        <p className="flex items-start justify-center gap-2 text-center text-xs text-charcoal-muted">
+        <p className="flex items-start justify-center gap-2 text-center text-xs leading-relaxed text-charcoal-muted">
           <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" /> Diagnosis bersifat estimasi berbasis foto, bukan pengganti pemeriksaan langsung oleh ahli tanaman. Untuk kondisi serius atau tanaman rare, konsultasikan ke nursery/ahli.
         </p>
       </section>
