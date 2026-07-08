@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Leaf, AlertCircle, RefreshCw, Loader2 } from "lucide-react";
 
