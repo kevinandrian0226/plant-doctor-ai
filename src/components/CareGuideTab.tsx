@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Sun, Droplets, Wind, Thermometer, Sprout, FlaskConical, Repeat, ShieldAlert, Sparkles, Loader2, CalendarPlus, Check } from "lucide-react";
+import Link from "next/link";
+import { Sun, Droplets, Wind, Thermometer, Sprout, FlaskConical, Repeat, ShieldAlert, Sparkles, Loader2, CalendarPlus, Check, BellRing } from "lucide-react";
 
 type Guide = {
   light: string; water: string; humidity: string; temperature: string;
@@ -29,6 +30,7 @@ export function CareGuideTab({
   const [error, setError] = useState<string | null>(null);
   const [scheduleDone, setScheduleDone] = useState(false);
   const [scheduling, setScheduling] = useState(false);
+  const [scheduleErr, setScheduleErr] = useState<string | null>(null);
 
   const generate = async () => {
     setLoading(true); setError(null);
@@ -43,10 +45,14 @@ export function CareGuideTab({
   };
 
   const makeSchedule = async () => {
-    setScheduling(true);
+    setScheduling(true); setScheduleErr(null);
     try {
       const res = await fetch(`/api/plants/${plantId}/care-schedule`, { method: "POST" });
-      if (res.ok) setScheduleDone(true);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "Gagal membuat jadwal.");
+      setScheduleDone(true);
+    } catch (e) {
+      setScheduleErr(e instanceof Error ? e.message : "Gagal membuat jadwal.");
     } finally { setScheduling(false); }
   };
 
@@ -69,12 +75,20 @@ export function CareGuideTab({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h3 className="eyebrow">Panduan Perawatan</h3>
-        <button onClick={makeSchedule} disabled={scheduling || scheduleDone} className="btn-secondary text-xs">
-          {scheduleDone ? <Check className="h-4 w-4 text-leaf-600" /> : scheduling ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
-          {scheduleDone ? "Jadwal dibuat" : "Buat jadwal perawatan"}
-        </button>
+        <div className="flex flex-col items-start gap-1 sm:items-end">
+          <button onClick={makeSchedule} disabled={scheduling || scheduleDone} className="btn-secondary text-xs">
+            {scheduleDone ? <Check className="h-4 w-4 text-leaf-600" /> : scheduling ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
+            {scheduleDone ? "Jadwal dibuat" : "Buat jadwal perawatan"}
+          </button>
+          {scheduleDone && (
+            <Link href="/reminders" className="inline-flex items-center gap-1 text-[11px] font-medium text-leaf-600 hover:underline">
+              <BellRing className="h-3 w-3" /> Lihat di Reminder
+            </Link>
+          )}
+          {scheduleErr && <p className="text-[11px] text-red-600">{scheduleErr}</p>}
+        </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         {ROWS.map((r) => guide[r.key] && (
