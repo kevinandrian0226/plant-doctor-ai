@@ -31,7 +31,7 @@ export default async function ProfilePage({ params }: { params: { handle: string
 
   const [{ data: pData }, { data: lData }, { data: { user } }, { count: followers }] = await Promise.all([
     supabase.from("plants").select("*").eq("user_id", profile.id).eq("is_public", true).order("shared_at", { ascending: false }),
-    supabase.from("listings").select("*").eq("user_id", profile.id).eq("status", "available").order("created_at", { ascending: false }),
+    supabase.from("listings").select("id, title, price, city, photo_url").eq("user_id", profile.id).eq("status", "available").order("created_at", { ascending: false }),
     supabase.auth.getUser(),
     supabase.from("follows").select("id", { count: "exact", head: true }).eq("following_id", profile.id),
   ]);
@@ -109,7 +109,7 @@ export default async function ProfilePage({ params }: { params: { handle: string
               {plants.map((p) => (
                 <Link key={p.id} href={`/p/${p.id}`} className="group card-lux overflow-hidden p-0">
                   <div className="relative aspect-square w-full bg-sage-100 dark:bg-white/5">
-                    {coverBy.get(p.id) ? <Image src={coverBy.get(p.id) as string} alt="" fill className="object-cover transition group-hover:scale-105" sizes="25vw" /> : <div className="flex h-full items-center justify-center text-charcoal-muted"><Leaf className="h-8 w-8" /></div>}
+                    {coverBy.get(p.id) ? <Image src={coverBy.get(p.id) as string} alt={p.nickname || p.common_name || "Tanaman"} fill className="object-cover transition group-hover:scale-105" sizes="25vw" /> : <div className="flex h-full items-center justify-center text-charcoal-muted"><Leaf className="h-8 w-8" /></div>}
                   </div>
                   <div className="p-2.5"><p className="truncate text-xs font-semibold">{p.nickname || p.common_name || "Tanaman"}</p><p className="truncate text-[11px] text-charcoal-muted">{p.category || "Tanaman hias"}</p></div>
                 </Link>
