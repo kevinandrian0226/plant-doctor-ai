@@ -36,8 +36,9 @@ export default async function ListingPage({ params }: { params: { id: string } }
   const { data: { user } } = await supabase.auth.getUser();
   const isOwner = !!user && user.id === l.user_id;
   const wa = (l.whatsapp || "").replace(/[^0-9]/g, "");
-  const waLink = wa
-    ? `https://wa.me/${wa.startsWith("0") ? "62" + wa.slice(1) : wa}?text=${encodeURIComponent(`Halo, saya tertarik dengan "${l.title}" (${rupiah(l.price)}) di Plant Doctor AI Marketplace.`)}`
+  const waIntl = wa.startsWith("0") ? "62" + wa.slice(1) : wa.startsWith("62") ? wa : wa ? "62" + wa : "";
+  const waLink = waIntl
+    ? `https://wa.me/${waIntl}?text=${encodeURIComponent(`Halo, saya tertarik dengan "${l.title}" (${rupiah(l.price)}) di Plant Doctor AI Marketplace.`)}`
     : null;
 
   return (
