@@ -51,6 +51,7 @@ export default async function LandingPage() {
           <span className="text-lg font-bold tracking-tight">Plant Doctor <span className="text-gold-600 dark:text-gold-300">AI</span></span>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/explore" className="hidden rounded-2xl px-4 py-2 text-sm font-semibold text-charcoal-light hover:text-leaf-700 sm:block dark:text-sage-200">Explore</Link>
           {user ? (
             <Link href="/dashboard" className="btn-primary">Dashboard</Link>
           ) : (
