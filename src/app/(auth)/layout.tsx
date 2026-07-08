@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-leaf-50 via-sand-50 to-leaf-100 px-4 py-12 dark:from-leaf-950 dark:via-gray-950 dark:to-leaf-950">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-cream-100 via-sand-50 to-leaf-100 px-4 py-12 dark:from-leaf-950 dark:via-charcoal dark:to-leaf-950">
       {/* Lapisan botanical blur premium */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         {/* gradient blobs */}
@@ -44,7 +44,7 @@ export default function AuthLayout({
       <div className="relative z-10 w-full max-w-md">
         <Link
           href="/"
-          className="mb-6 block text-center text-sm text-gray-500 transition hover:text-leaf-600"
+          className="mb-6 block text-center text-sm text-charcoal-muted transition hover:text-gold-600 dark:hover:text-gold-300"
         >
           ← Kembali ke beranda
         </Link>
