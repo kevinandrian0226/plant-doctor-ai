@@ -29,7 +29,7 @@ export function Badges({ plantCount, scanCount, publicCount }: Counts) {
           const got = b.need(counts);
           return (
             <div key={b.key} className={`flex flex-col items-center gap-1.5 rounded-2xl border p-3 text-center transition ${got ? "border-gold-200 bg-gold-50 dark:border-gold-700/40 dark:bg-gold-900/10" : "border-black/5 bg-sage-50/50 opacity-55 dark:border-white/10 dark:bg-white/5"}`}>
-              <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${got ? "bg-gold-400 text-leaf-950" : "bg-sage-200 text-charcoal-muted dark:bg-white/10"}`}><b.icon className="h-4.5 w-4.5" /></span>
+              <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${got ? "bg-gold-400 text-leaf-950" : "bg-sage-200 text-charcoal-muted dark:bg-white/10"}`}><b.icon className="h-5 w-5" /></span>
               <p className="text-[11px] font-semibold leading-tight">{b.label}</p>
               <p className="text-[10px] leading-tight text-charcoal-muted">{b.desc}</p>
             </div>

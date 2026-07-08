@@ -36,7 +36,7 @@ export function Navbar({ email }: { email?: string }) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-black/5 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-gray-950/80">
+      <header className="sticky top-0 z-40 border-b border-black/5 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-charcoal/80">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/dashboard" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-leaf-700 text-white shadow-soft ring-1 ring-gold-300/30">
@@ -54,7 +54,7 @@ export function Navbar({ email }: { email?: string }) {
                   "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition",
                   isActive(href)
                     ? "bg-leaf-100 text-leaf-700 dark:bg-leaf-900/40 dark:text-leaf-200"
-                    : "text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    : "text-charcoal-muted hover:bg-sage-100 dark:hover:bg-white/5"
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -66,7 +66,7 @@ export function Navbar({ email }: { email?: string }) {
           <div className="flex items-center gap-1">
             <button
               onClick={toggle}
-              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="rounded-lg p-2 text-charcoal-muted hover:bg-sage-100 dark:hover:bg-white/5"
               aria-label="Ganti tema"
             >
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -77,7 +77,7 @@ export function Navbar({ email }: { email?: string }) {
                 "rounded-lg p-2 transition",
                 isActive("/settings")
                   ? "bg-leaf-100 text-leaf-700 dark:bg-leaf-900/40 dark:text-leaf-200"
-                  : "text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  : "text-charcoal-muted hover:bg-sage-100 dark:hover:bg-white/5"
               )}
               aria-label="Pengaturan"
             >
@@ -87,7 +87,7 @@ export function Navbar({ email }: { email?: string }) {
               <button
                 type="submit"
                 title={email ? `Keluar (${email})` : "Keluar"}
-                className="flex items-center gap-2 rounded-lg p-2 text-gray-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20"
+                className="flex items-center gap-2 rounded-lg p-2 text-charcoal-muted hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20"
               >
                 <LogOut className="h-5 w-5" />
               </button>
@@ -97,19 +97,19 @@ export function Navbar({ email }: { email?: string }) {
       </header>
 
       {/* Bottom nav (mobile) */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-black/5 bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-gray-950/90 md:hidden">
-        <div className="mx-auto flex max-w-md items-center justify-around px-2 py-1.5">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-black/5 bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-charcoal/90 md:hidden">
+        <div className="mx-auto flex max-w-md items-center justify-around px-1 py-1.5">
           {NAV.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 rounded-lg py-1.5 text-[11px] font-medium transition",
-                isActive(href) ? "text-leaf-600" : "text-gray-400"
+                "flex flex-1 flex-col items-center gap-0.5 rounded-lg py-1.5 text-[10px] font-medium transition",
+                isActive(href) ? "text-leaf-600" : "text-charcoal-muted"
               )}
             >
               <Icon className="h-5 w-5" />
-              {label}
+              <span className="max-w-full truncate">{label}</span>
             </Link>
           ))}
         </div>

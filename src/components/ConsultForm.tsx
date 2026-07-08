@@ -15,6 +15,7 @@ export function ConsultForm({ plants }: { plants: { id: string; name: string }[]
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (busy || !message.trim()) return;
+    if (!contact.trim()) { setError("Isi kontak (WhatsApp/email) agar ahli bisa menghubungimu."); return; }
     setBusy(true); setError(null);
     try {
       const res = await fetch("/api/consult", {
@@ -57,14 +58,14 @@ export function ConsultForm({ plants }: { plants: { id: string; name: string }[]
       </div>
       <div>
         <label className="label">Kontak (WhatsApp/email)</label>
-        <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="mis. 08xx / email" className="input" />
+        <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="mis. 08xx / email" className="input" required />
       </div>
       <div>
-        <label className="label">Ceritakan masalahmu</label>
-        <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={4} placeholder="Deskripsikan kondisi tanaman & pertanyaanmu..." className="input" />
+        <div className="flex items-baseline justify-between"><label className="label">Ceritakan masalahmu</label><span className="text-[11px] text-charcoal-muted">{message.length}/2000</span></div>
+        <textarea value={message} maxLength={2000} onChange={(e) => setMessage(e.target.value)} rows={4} placeholder="Deskripsikan kondisi tanaman & pertanyaanmu..." className="input" />
       </div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-300">{error}</p>}
-      <button type="submit" disabled={busy || !message.trim()} className="btn-primary w-full">
+      <button type="submit" disabled={busy || !message.trim() || !contact.trim()} className="btn-primary w-full">
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} Kirim permintaan konsultasi
       </button>
       <p className="flex items-center gap-1.5 text-center text-xs text-charcoal-muted"><Stethoscope className="h-3.5 w-3.5" /> Layanan konsultasi ahli tanaman — respon dalam 1×24 jam kerja.</p>

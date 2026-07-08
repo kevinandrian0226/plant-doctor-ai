@@ -33,15 +33,18 @@ export function ProfileSettings({ initial }: { initial: { handle: string; bio: s
       <div>
         <label className="label">Username publik</label>
         <div className="relative">
-          <AtSign className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <input value={handle} onChange={(e) => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} placeholder="namakolektor" className="input pl-10" />
+          <AtSign className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-charcoal-muted" />
+          <input value={handle} onChange={(e) => { setSaved(false); setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")); }} placeholder="namakolektor" className="input pl-10" />
         </div>
         {handle && <p className="mt-1 text-xs text-charcoal-muted">Profilmu: /u/{handle}</p>}
       </div>
-      <div><label className="label">Bio</label><textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} placeholder="Kolektor aroid & monstera langka..." className="input" /></div>
+      <div>
+        <div className="flex items-baseline justify-between"><label className="label">Bio</label><span className="text-[11px] text-charcoal-muted">{bio.length}/280</span></div>
+        <textarea value={bio} maxLength={280} onChange={(e) => { setSaved(false); setBio(e.target.value); }} rows={3} placeholder="Kolektor aroid & monstera langka..." className="input" />
+      </div>
       <div className="flex items-center justify-between">
         <div><p className="text-sm font-semibold">Profil publik</p><p className="text-xs text-charcoal-muted">Bisa ditemukan & diikuti kolektor lain</p></div>
-        <button type="button" onClick={() => setIsPublic(!isPublic)} className={`relative h-7 w-12 shrink-0 rounded-full transition ${isPublic ? "bg-leaf-600" : "bg-sage-300 dark:bg-white/15"}`}>
+        <button type="button" onClick={() => { setSaved(false); setIsPublic(!isPublic); }} className={`relative h-7 w-12 shrink-0 rounded-full transition ${isPublic ? "bg-leaf-600" : "bg-sage-300 dark:bg-white/15"}`}>
           <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${isPublic ? "left-6" : "left-1"}`} />
         </button>
       </div>

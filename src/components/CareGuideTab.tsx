@@ -29,6 +29,7 @@ export function CareGuideTab({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scheduleDone, setScheduleDone] = useState(false);
+  const [scheduleCount, setScheduleCount] = useState(0);
   const [scheduling, setScheduling] = useState(false);
   const [scheduleErr, setScheduleErr] = useState<string | null>(null);
 
@@ -50,6 +51,7 @@ export function CareGuideTab({
       const res = await fetch(`/api/plants/${plantId}/care-schedule`, { method: "POST" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || "Gagal membuat jadwal.");
+      setScheduleCount(Number(data?.created) || 3);
       setScheduleDone(true);
     } catch (e) {
       setScheduleErr(e instanceof Error ? e.message : "Gagal membuat jadwal.");
@@ -84,7 +86,7 @@ export function CareGuideTab({
           </button>
           {scheduleDone && (
             <Link href="/reminders" className="inline-flex items-center gap-1 text-[11px] font-medium text-leaf-600 hover:underline">
-              <BellRing className="h-3 w-3" /> Lihat di Reminder
+              <BellRing className="h-3 w-3" /> {scheduleCount} pengingat dibuat — lihat
             </Link>
           )}
           {scheduleErr && <p className="text-[11px] text-red-600">{scheduleErr}</p>}
