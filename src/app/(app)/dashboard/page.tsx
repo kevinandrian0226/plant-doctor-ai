@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sprout, Activity, AlertTriangle, Leaf, BellRing, ScanLine, ArrowRight } from "lucide-react";
+import { Sprout, Activity, AlertTriangle, Leaf, BellRing, ScanLine, ArrowRight, Stethoscope } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { PlantCard } from "@/components/PlantCard";
 import { ReminderList, type ReminderItem } from "@/components/ReminderList";
 import { HealthBadge } from "@/components/HealthBadge";
 import { RiskBadge } from "@/components/RiskBadge";
 import { EmptyState } from "@/components/ui/States";
+import { Badges } from "@/components/Badges";
 import { isDiagnosisScan } from "@/lib/diagnosis";
 import { statusFromScore } from "@/lib/health";
 import { formatDate } from "@/lib/utils";
@@ -40,6 +41,7 @@ export default async function DashboardPage() {
   const latestPlant = latest?.plant_id ? plantById.get(latest.plant_id) : undefined;
 
   const total = plants.length;
+  const publicCount = plants.filter((p) => p.is_public).length;
   const healthy = plants.filter((p) => (latestScanByPlant.get(p.id)?.health_score ?? 0) >= 75).length;
   const needCare = plants.filter((p) => {
     const sc = latestScanByPlant.get(p.id);
@@ -62,7 +64,10 @@ export default async function DashboardPage() {
           <h1 className="display-title text-3xl">Halo, {name} 🌿</h1>
           <p className="mt-0.5 text-sm text-charcoal-muted">Pantau kesehatan koleksi tanamanmu.</p>
         </div>
-        <Link href="/scan" className="btn-primary"><ScanLine className="h-4 w-4" /> Scan New Plant</Link>
+        <div className="flex items-center gap-2">
+          <Link href="/konsultasi" className="btn-secondary"><Stethoscope className="h-4 w-4" /> Konsultasi Ahli</Link>
+          <Link href="/scan" className="btn-primary"><ScanLine className="h-4 w-4" /> Scan New Plant</Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
@@ -70,6 +75,9 @@ export default async function DashboardPage() {
         <Stat icon={Activity} label="Sehat" value={healthy} tone="green" />
         <Stat icon={AlertTriangle} label="Perlu Perhatian" value={needCare} tone="amber" />
       </div>
+
+      <Badges plantCount={total} scanCount={diagnosisScans.length} publicCount={publicCount} />
+      <div className="text-center"><Link href="/profil/edit" className="text-xs font-semibold text-leaf-600 hover:underline">Atur profil publik & username →</Link></div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section>
