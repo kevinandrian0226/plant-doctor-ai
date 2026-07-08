@@ -19,8 +19,8 @@ export default async function MarketPage() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const { data } = await supabase
-    .from("listings").select("*").eq("status", "available").order("created_at", { ascending: false }).limit(60);
-  const listings = (data || []) as ListingRecord[];
+    .from("listings").select("id, title, price, city, photo_url").eq("status", "available").order("created_at", { ascending: false }).limit(60);
+  const listings = (data || []) as Pick<ListingRecord, "id" | "title" | "price" | "city" | "photo_url">[];
 
   return (
     <div className="min-h-screen bg-cream-100 dark:bg-charcoal">
