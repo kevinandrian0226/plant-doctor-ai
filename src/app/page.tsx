@@ -170,7 +170,18 @@ export default async function LandingPage() {
       </section>
 
       <footer className="border-t border-black/5 py-8 text-center text-sm text-charcoal-muted dark:border-white/10">
-        <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-5"><Leaf className="h-4 w-4 text-leaf-600" /> Plant Doctor AI — dibuat untuk para pecinta tanaman.</div>
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-3 px-5">
+          <div className="flex items-center gap-2"><Leaf className="h-4 w-4 text-leaf-600" /> Plant Doctor AI — dibuat untuk para pecinta tanaman.</div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs">
+            <Link href="/privasi" className="hover:text-leaf-600">Kebijakan Privasi</Link>
+            <span className="text-charcoal-muted/40">•</span>
+            <Link href="/ketentuan" className="hover:text-leaf-600">Syarat &amp; Ketentuan</Link>
+            <span className="text-charcoal-muted/40">•</span>
+            <Link href="/explore" className="hover:text-leaf-600">Explore</Link>
+            <span className="text-charcoal-muted/40">•</span>
+            <Link href="/market" className="hover:text-leaf-600">Marketplace</Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
