@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sprout, Activity, AlertTriangle, Leaf, BellRing, ScanLine, ArrowRight, Stethoscope } from "lucide-react";
+import { Sprout, Activity, AlertTriangle, Leaf, BellRing, ScanLine, ArrowRight, Stethoscope, Inbox } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { PlantCard } from "@/components/PlantCard";
 import { ReminderList, type ReminderItem } from "@/components/ReminderList";
@@ -56,6 +56,8 @@ export default async function DashboardPage() {
   }));
 
   const name = (user?.user_metadata?.full_name as string) || user?.email?.split("@")[0] || "Plant Lover";
+  const adminEmail = process.env.ADMIN_EMAIL || "";
+  const isAdmin = !!user?.email && !!adminEmail && user.email.toLowerCase() === adminEmail.toLowerCase();
 
   return (
     <div className="space-y-6">
@@ -65,6 +67,7 @@ export default async function DashboardPage() {
           <p className="mt-0.5 text-sm text-charcoal-muted">Pantau kesehatan koleksi tanamanmu.</p>
         </div>
         <div className="flex items-center gap-2">
+          {isAdmin && <Link href="/admin/konsultasi" className="btn-secondary"><Inbox className="h-4 w-4" /> Inbox</Link>}
           <Link href="/konsultasi" className="btn-secondary"><Stethoscope className="h-4 w-4" /> Konsultasi Ahli</Link>
           <Link href="/scan" className="btn-primary"><ScanLine className="h-4 w-4" /> Scan New Plant</Link>
         </div>
